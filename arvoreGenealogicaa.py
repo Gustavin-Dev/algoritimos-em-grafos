@@ -2,17 +2,22 @@ def contar_familias(entrada):
     linhas = entrada.strip().split('\n')
     m, n = map(int, linhas[0].split())
 
-
     from collections import defaultdict
 
     grafo = defaultdict(list)
     pessoas = set()
-
+    
+    # Relacionamentos (arestas do grafo)
     for i in range(1, n + 1):
         p1, _, p2 = linhas[i].split()
         grafo[p1].append(p2)
         grafo[p2].append(p1)
         pessoas.update([p1, p2])
+    
+    # Inclui pessoas "isoladas" (sem nenhuma relação) para garantir M pessoas
+    while len(pessoas) < m:
+        nome_gerado = f"isento{len(pessoas)}"
+        pessoas.add(nome_gerado)
 
     visitado = set()
 
@@ -30,7 +35,6 @@ def contar_familias(entrada):
 
     return familias
 
-# Exemplo 1
 entrada1 = """8 8
 Pedro marido Maria
 Pedro pai Josias
