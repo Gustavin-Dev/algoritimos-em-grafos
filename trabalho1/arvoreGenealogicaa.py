@@ -16,7 +16,7 @@ def contar_familias(entrada):
     
     # Inclui pessoas "isoladas" (sem nenhuma relação) para garantir M pessoas
     while len(pessoas) < m:
-        nome_gerado = f"isento{len(pessoas)}"
+        nome_gerado = f"pessoa isolada {len(pessoas)}"
         pessoas.add(nome_gerado)
 
     visitado = set()
