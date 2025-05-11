@@ -6,7 +6,12 @@ def hierarquiaDeProfundidade(entrada):
     
 
     grafo = defaultdict(list)
+    
     nos = set()
+    visitado = set()
+
+    profundidadeVertices = {}
+
 
     for caso in range(QuantidadeDeCasos):
         print(f"caso {caso + 1}:")
@@ -17,14 +22,14 @@ def hierarquiaDeProfundidade(entrada):
         grafo[n2].append(n1)
         nos.update([n1, n2])
     
-    profundidadeVertices = {}
+    
     
     while len(nos) < vertices:
         no_gerado = f"isolado{len(nos)}"
         nos.add(no_gerado)
         grafo[no_gerado] = []
     
-    visitado = set()
+    
 
     def dfs(vertice,profundidade):
         visitado.add(vertice)
