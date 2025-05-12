@@ -13,9 +13,6 @@ def hierarquiaDeProfundidade(entrada):
     profundidadeVertices = {}
 
 
-    for caso in range(QuantidadeDeCasos):
-        print(f"caso {caso + 1}:")
-
     for i in range(2, arestas + 2):
         n1,n2 = linhas[i].split()
         grafo[n1].append(n2)
