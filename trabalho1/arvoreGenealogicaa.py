@@ -1,59 +1,61 @@
 def contar_familias(entrada):
     linhas = entrada.strip().split('\n')
-    m, n = map(int, linhas[0].split())
+    QuantidadePessoas, quantidadeRelacoes = map(int, linhas[0].split())
 
     from collections import defaultdict
 
     grafo = defaultdict(list)
     pessoas = set()
+    visitado = set()
     
-    # Relacionamentos (arestas do grafo)
-    for i in range(1, n + 1):
-        p1, _, p2 = linhas[i].split()
-        grafo[p1].append(p2)
-        grafo[p2].append(p1)
-        pessoas.update([p1, p2])
+    #preenchimento do grafo de acordo com lista de adjacencia
+    for i in range(1, quantidadeRelacoes + 1):
+        pessoa1, _, pessoa2 = linhas[i].split()
+        grafo[pessoa1].append(pessoa2) #grafo nao direcionado, entao adcionamos a adjacencia em ambos os vertices
+        grafo[pessoa2].append(pessoa1)
+        pessoas.update([pessoa1, pessoa2])
     
-    # Inclui pessoas "isoladas" (sem nenhuma relação) para garantir M pessoas
-    while len(pessoas) < m:
+    #inclui vertices isolados (sem relação)
+    while len(pessoas) < QuantidadePessoas:
         nome_gerado = f"pessoa isolada {len(pessoas)}"
         pessoas.add(nome_gerado)
 
-    visitado = set()
-
-    def dfs(pessoa):
-        visitado.add(pessoa)
-        for vizinho in grafo[pessoa]:
+    #busca em profundidade
+    def dfs(vertice):
+        visitado.add(vertice)
+        for vizinho in grafo[vertice]:
             if vizinho not in visitado:
                 dfs(vizinho)
 
-    familias = 0
+    familias = 0 # equivalente a componentes conexas do grafo, que na modelagem do problema aparece como se fossem as familias
+
+    #aplicando busca em profundidade a fim de achar a quantidade de componentes conexas do grafo(familias)
     for pessoa in pessoas:
         if pessoa not in visitado:
             dfs(pessoa)
             familias += 1
 
-    return familias
+    print(familias)
 
 entrada1 = """8 8
-Pedro marido Maria
+Pedro marido maria
 Pedro pai Josias
-Josias irmao Mangojata
-Maria mae Mangojata
-Samuel filho Maria
-Paulo filho Marcos
+Josias irmao mangojata
+maria mae mangojata
+Samuel filho maria
+Paulo filho marcos
 Samuel tio Ivane
-Mangojata mae Ivane"""
+mangojata mae Ivane"""
 
-print(contar_familias(entrada1))
+contar_familias(entrada1)
 
 # Exemplo 2
 entrada2 = """9 6
-Jose_1 marido Maria
+Jose_1 marido maria
 Josias marido Liboria
 Liboria mae Guapo
-Sandra filho Maria
+Sandra filho maria
 Paulo filho Jose_2
 Sandra mae Ivanir"""
 
-print(contar_familias(entrada2))
+contar_familias(entrada2)

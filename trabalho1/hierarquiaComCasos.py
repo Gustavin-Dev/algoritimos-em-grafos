@@ -1,63 +1,68 @@
-def dfs(grafo, vertice, profundidade, visitado, profundidadeVertices):
+def dfs(grafo, vertice, profundidade, visitado):
     visitado.add(vertice)
-    profundidadeVertices[vertice] = profundidade
-    for vizinho in grafo[vertice]:
+    for vizinho in sorted(grafo[vertice], key=int):  # Ordenar para saída em ordem numérica
         if vizinho not in visitado:
-            dfs(grafo, vizinho, profundidade + 1, visitado, profundidadeVertices)
-
-def criacaoGrafo(grafo, nos, arestas, vertices, linhas, indexLinhas):
-    #preenche o grafo com oos vertices e arestas com lista de adjacencia
-    for _ in range(arestas):
-        n1, n2 = linhas[indexLinhas[0]].split()
-        grafo[n1].append(n2)
-        grafo[n2].append(n1)
-        nos.update([n1, n2])
-        indexLinhas[0] += 1
-
-    # Adiciona vértices isolados se necessário
-    while len(nos) < vertices:
-        no_gerado = f"isolado{len(nos)}"
-        nos.add(no_gerado)
-        grafo[no_gerado] = []
+            print(f"{'  ' * profundidade}{vertice}-{vizinho} pathR(G,{vizinho})")
+            dfs(grafo, vizinho, profundidade + 1, visitado)
+        else:
+            print(f"{'  ' * profundidade}{vertice}-{vizinho}")
 
 def hierarquiaPorCasos(entrada):
-        from collections import defaultdict
-        linhas = entrada.strip().split('\n')
-        indexLinhas = [0]
-        QuantidadeDeCasos = int(linhas[indexLinhas[0]])
-        indexLinhas[0] += 1
+    from collections import defaultdict
+    linhas = entrada.strip().split('\n')
+    indexLinhas = 0
+    QuantidadeDeCasos = int(linhas[indexLinhas])
+    indexLinhas += 1
 
-        for caso in range(QuantidadeDeCasos):
-            print(f"caso {caso + 1}:")
+    for caso in range(QuantidadeDeCasos):
+        print(f"Caso {caso + 1}:")
 
-            #grafo e estruturas para cada caso
-            grafo = defaultdict(list)
-            nos = set()
-            visitado = set()
-            profundidadeVertices = {}
+        grafo = defaultdict(list)
+        nos = set()
+        visitado = set()
 
-            # Lê quantidade de vertices e arestas de acordo com a entrada
-            vertices, arestas = map(int, linhas[indexLinhas[0]].split())
-            indexLinhas[0] += 1
+        vertices, arestas = map(int, linhas[indexLinhas].split())
+        indexLinhas += 1
 
-            criacaoGrafo(grafo, nos, arestas, vertices, linhas, indexLinhas)
+        #preenchimento do grafo por lista de adjacencia
+        for _ in range(arestas):
+            n1, n2 = linhas[indexLinhas].split()
+            indexLinhas += 1
+            grafo[n1].append(n2)
+            nos.update([n1, n2])
 
-            # Executa DFS para todos os componentes
-            for no in nos:
-                if no not in visitado:
-                    dfs(grafo, no, 0, visitado, profundidadeVertices)
+        # Adiciona nós isolados caso faltem
+        while len(nos) < vertices:
+            no_gerado = f"isolado{len(nos)}"
+            nos.add(no_gerado)
+            grafo[no_gerado] = []
 
-            print(profundidadeVertices)
-
+        # aplicando o busca em profundidade para todos os componentes do grafo
+        for no in sorted(nos, key=str): #em ordem numerica
+            if no not in visitado:
+                dfs(grafo, no, 0, visitado)
+                print()      
+        
+# Teste com a entrada do problema
 entrada = """2
-6 4
+13 9
+0 1
+1 5
+5 6
+0 4
+4 2
+2 3
+7 8
+1 7
+10 11
+11 8
 0 1
 1 2
 3 4
 4 3
-0 1
-0 2
-0 3"""
+5 6
+6 8
+7 9
+9 10"""
 
 hierarquiaPorCasos(entrada)
-
