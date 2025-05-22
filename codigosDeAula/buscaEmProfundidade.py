@@ -8,8 +8,7 @@ def dfs(grafo, v, visitado, pre, pa, contador, componente, ciclo_flag):
         if not visitado[vertice]:
             pa[vertice] = v
             dfs(grafo, vertice, visitado, pre, pa, contador, componente, ciclo_flag)
-        elif vertice != pa[v]:
-            # Aresta para vértice já visitado que não é o pai ⇒ ciclo
+        else:
             ciclo_flag[0] = True
 
 def dfs_completo(grafo):
@@ -29,11 +28,15 @@ def dfs_completo(grafo):
 
     return pre, pa, componentes, ciclo_flag[0]
 grafo = {
-    0: [1, 2],
-    1: [0],
-    2: [0],
-    3: [4],
-    4: [3]
+    0: [1,2],
+    1: [0,2,3,4],
+    2: [0,1,3],
+    3: [1,2],
+    4: [1],
+    5: [6],
+    6: [5,7],
+    7: [6],
+    8: []
 }
 
 pre, pa, componentes, tem_ciclo = dfs_completo(grafo)
