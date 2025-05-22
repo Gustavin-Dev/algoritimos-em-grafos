@@ -4,16 +4,15 @@ def dfs(grafo, v, visitado, pre, pa, contador, componente, ciclo_flag):
     contador[0] += 1
     componente.append(v)
 
-    for w in grafo[v]:
-        if not visitado[w]:
-            pa[w] = v
-            dfs(grafo, w, visitado, pre, pa, contador, componente, ciclo_flag)
-        elif w != pa[v]:
+    for vertice in grafo[v]:
+        if not visitado[vertice]:
+            pa[vertice] = v
+            dfs(grafo, vertice, visitado, pre, pa, contador, componente, ciclo_flag)
+        elif vertice != pa[v]:
             # Aresta para vértice já visitado que não é o pai ⇒ ciclo
             ciclo_flag[0] = True
 
 def dfs_completo(grafo):
-    n = len(grafo)
     visitado = {v: False for v in grafo}
     pre = {v: -1 for v in grafo}
     pa = {v: -1 for v in grafo}
